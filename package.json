@@ -1,0 +1,40 @@
+{
+  "name": "devtech-codepolicy",
+  "version": "1.0.0",
+  "description": "Automatically install git pre hooks in your git repository",
+  "main": "index.js",
+  "scripts": {
+    "install": "node install.js",
+    "uninstall": "node uninstall.js"
+  },
+  "keywords": [
+    "git",
+    "hooks",
+    "commit",
+    "release",
+    "package"
+  ],
+  "author": {
+    "name": "cyrillef",
+    "email": "cyrillef@free.fr",
+    "url": "http://around-the-corner.typepad.com/"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ADN-DevTech/devtech-codepolicy.git"
+  },
+  "license": "MIT",
+  "engine": {
+    "node": ">=0.10"
+  },
+  
+  "homepage": "https://github.com/ADN-DevTech/devtech-codepolicy",
+  "maintainers": [
+    {
+      "name": "cyrillef",
+      "email": "cyrillef@free.fr",
+    }
+  ],
+  "directories": {},
+  "readme": "README.md"
+}

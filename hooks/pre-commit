@@ -1,0 +1,71 @@
+#!/bin/sh
+
+function keys {
+	echo ""
+	echo "Beware you got your keys in credentials.js, please remove them."
+	echo "  use: '<replace with your consumer key>' line #22"
+	echo "  and: '<replace with your consumer secret>' line #23"
+	echo ""
+	
+	OIFS="${IFS}"
+	NIFS=$'\n'
+	IFS="${NIFS}"
+
+	if [ "$1" != "" ]; then
+		for line in $1; do
+			IFS="${OIFS}"
+			echo "  " $line
+			IFS="${NIFS}"
+		done
+		IFS="${OIFS}"
+		echo ""
+	fi
+	exit 1
+}
+
+function urn {
+	echo ""
+	echo "Beware you got a URN key in www/index.js, please remove it."
+	echo "  use: '<replace with your encoded urn>' line #18"
+	echo ""
+	
+	OIFS="${IFS}"
+	NIFS=$'\n'
+	IFS="${NIFS}"
+
+	if [ "$1" != "" ]; then
+		for line in $1; do
+			IFS="${OIFS}"
+			echo "  " $line
+			IFS="${NIFS}"
+		done
+		IFS="${OIFS}"
+		echo ""
+	fi
+	exit 1
+}
+
+STAGED_FILES_CMD=`git diff --cached --name-only --diff-filter=ACMR HEAD | grep \\\\.js`
+SFILES=${SFILES:-$STAGED_FILES_CMD}
+ 
+echo "Checking keys & urn..."
+for FILE in $SFILES; do
+	echo $FILE
+	
+	if [ "$FILE" == "credentials.js" ]; then
+		if [ "`grep -in '<replace with your consumer key>' $FILE | cut -d : -f 1`" != "22" ]; then keys; fi
+		if [ "`grep -in '<replace with your consumer secret>' $FILE | cut -d : -f 1`" != "23" ]; then keys; fi
+		test="`grep -inE '[\"'\'']{1}[[:alpha:]0-9]{16,32}[\"'\'']{1}' $FILE`"
+		if [ "$test" != "" ];then keys "$test"; fi
+	fi
+	
+	if [ "$FILE" == "www/index.js" ]; then
+		if [ "`grep -in '<replace with your encoded urn>' $FILE | cut -d : -f 1`" != "18" ]; then urn; fi
+		test="`grep -inE '[\"'\'']{1}[[:alpha:]0-9]{32,}[\"'\'']{1}' $FILE`"
+		if [ "$test" != "" ];then urn "$test"; fi
+	fi
+
+	#FILES="$FILES $PROJECT/$FILE"
+done
+
+exit 0
